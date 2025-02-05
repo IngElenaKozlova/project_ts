@@ -1,0 +1,53 @@
+existShop = middlewarAccessToShop
+autorisation = 
+owner =
+adminRoots = 
+
+
+create shop     10
+delete shop                    autorisation owner
+edit   shop          existShop autorisation owner
+
+create  client  10   existShop autorisation adminRoots
+delete  client       existShop autorisation adminRoots
+edit    client       existShop autorisation adminRoots
+
+create  product 8    existShop autorisation adminRoots
+delete  product      existShop autorisation adminRoots
+edit    product      existShop autorisation adminRoots
+
+create  history      existShop autorisation adminRoots
+delete  history      existShop autorisation adminRoots
+edit    history      existShop autorisation adminRoots
+
+create  admin        existShop autorisation adminRoots
+delete  admin        existShop autorisation adminRoots
+edit    admin        existShop autorisation adminRoots
+
+
+0 - 10
+
+
+
+
+---- route ----
+(? middlware) 
+
+controlFuncion()  { ok : boolean, data ? : resWork, status ? : number, text ? : text }
+
+if (valid) valid
+
+res.status(code).json(response)
+
+
+
+
+---- controlFuncion ---
+
+if (valid) valid
+newObject{}
+fs
+return {data : newObject{}, ok : true}
+
+
+
