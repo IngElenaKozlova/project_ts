@@ -18,11 +18,12 @@ router.post('/createProduct', middlewarAccessToShop, async (req, res) => {
         //         stock: 15,
         //         description: "High-performance laptop with 16GB RAM and 512GB SSD storage.",
         //         isAvailable: true,
+        //         rating: 4.5,
         //         type: 'LAPTOP'
         //}
 
        
-        const { name, price, category, stock, description, isAvailable, type } = req.body;
+        const { name, price, category, stock, description, isAvailable, rating, type } = req.body;
         const { shopid, shopemail } = req.headers;
         // console.log(shopid, shopemail)
         const response = await controlerShop.createProduct(req.body, shopemail)
@@ -42,5 +43,20 @@ router.post('/createProduct', middlewarAccessToShop, async (req, res) => {
 
 })
 
+router.delete('/deleteProduct/:productid', middlewarAccessToShop, async (req, res) => {
+    try {
+        const productToDel = req.params.productid
+        const { shopemail } = req.headers;
+        const response = await controlerShop.deleteProduct(productToDel, shopemail)
+        if (!response.ok) {
+            const {status, text} = responseError(404)
+            return res.status(status).json({text, ok : false})
+        }
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok : false })
+    }
+})
 
 module.exports = router

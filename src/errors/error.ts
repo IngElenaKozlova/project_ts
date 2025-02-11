@@ -1,6 +1,6 @@
 const ERRORS = {
     409 : "Email already exist",
-    404 : "Email not found",
+    404 : "Not found",
     403 : "No access to the shop"
 }
 

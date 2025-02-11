@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct } from '../fs/fs';
+import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct, readFileProduct, deleteFileProduct } from '../fs/fs';
 import {shopI, createClientI, productI} from './interface'
 import {responseControler} from '../interface/response'
 
@@ -186,7 +186,7 @@ export default {
         return {data : newClient, ok : true}
     },
 
-    async createProduct({ name, price, category, stock, description, isAvailable, type }: productI, shopEmail: string) : Promise<responseControler>  {
+    async createProduct({ name, price, category, stock, description, isAvailable, rating, type }: productI, shopEmail: string) : Promise<responseControler>  {
         // To do add email exist  module sistem
         
         const keys = {
@@ -196,10 +196,10 @@ export default {
             stock: { rools: ROOLS.number },
             description: { rools: ROOLS.text },
             isAvailable: { rools: ROOLS.boolean },
-            // rating
+            rating: { rools: ROOLS.number },
             type: { rools: ROOLS.text }
         }
-        const isValidationError = isAllValidation({ name, price, category, stock, description, isAvailable, type }, keys)
+        const isValidationError = isAllValidation({ name, price, category, stock, description, isAvailable, rating, type }, keys)
 
         if (isValidationError.ok) return isValidationError 
 
@@ -212,12 +212,22 @@ export default {
             stock, 
             description, 
             isAvailable, 
+            rating,
             type
         }
 
         await createFileProduct(newProduct, shopEmail)
 
         return {data : newProduct, ok : true}
+    },
+
+    async deleteProduct(productId: string, shopEmail: string) : Promise<responseControler>  {
+
+        return await deleteFileProduct(productId, shopEmail)
+        // const checkDeleteProduct = await readFileProduct(productId, shopEmail)
+        // if (checkDeleteProduct) return {ok : false}
+        // return {ok : true}
+
     }
 }
 
