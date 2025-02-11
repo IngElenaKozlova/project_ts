@@ -13,7 +13,7 @@ delete  client       existShop autorisation adminRoots
 edit    client       existShop autorisation adminRoots
 
 create  product 10  existShop autorisation adminRoots
-delete  product 8   existShop autorisation adminRoots
+delete  product 10   existShop autorisation adminRoots
 edit    product      existShop autorisation adminRoots
 
 create  history      existShop autorisation adminRoots
