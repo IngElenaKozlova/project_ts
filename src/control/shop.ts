@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { ROOLS, isAllValidation } from './validation'
 import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct, readFileProduct, deleteFileProduct } from '../fs/fs';
-import {shopI, createClientI, productI} from './interface'
-import {responseControler} from '../interface/response'
+import { shopI, createClientI, productI } from './interface'
+import { responseControler } from '../interface/response'
 
 
 // rools = [empty, ] rools
@@ -100,32 +100,32 @@ import {responseControler} from '../interface/response'
 // shopA.createClient({ name: 'sada', email: 'user@gmail.com', password: 'sadA1@' })
 
 export default {
-    async createShop({shopName, email, password}) : Promise<responseControler>{ // Toys
+    async createShop({ shopName, email, password }): Promise<responseControler> { // Toys
         //TODO add email exist  module sistem
-        const keys = {shopName: { rools: ROOLS.text }, email: { rools: ROOLS.email}, password: { rools : ROOLS.password}} 
-        const isValidationError = isAllValidation({shopName, email, password}, keys)
+        const keys = { shopName: { rools: ROOLS.text }, email: { rools: ROOLS.email }, password: { rools: ROOLS.password } }
+        const isValidationError = isAllValidation({ shopName, email, password }, keys)
         if (isValidationError.ok) return isValidationError;
 
         const isEmailExist = isEmailExistInShop(email)
-        if (isEmailExist) return  { status: 409, ok: false }
-        
+        if (isEmailExist) return { status: 409, ok: false }
+
         const shopId: string = uuidv4()
-        const crypted_password : string = await bcrypt.hash(password, process.env.SECREAT_ID)
-        const date_create : number = Date.now();
+        const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
+        const date_create: number = Date.now();
         const newShop: shopI = {
             shopId,
             shopName,
             email,
-            password : crypted_password,
+            password: crypted_password,
             date_create
         }
 
         await createStartPackShop(newShop)
 
-        return {data : newShop, ok : true}
+        return { data: newShop, ok: true }
     },
-    
-    async createClient({ name, email, password }: createClientI, shopEmail: string) : Promise<responseControler> {
+
+    async createClient({ name, email, password }: createClientI, shopEmail: string): Promise<responseControler> {
         //TODO add email exist  module sistem
         // const isShopExists = await checkShopExist(shopEmail)
         // if (!isShopExists) return { error: 404, ok : false }
@@ -147,11 +147,11 @@ export default {
         }
         const isValidationError = isAllValidation({ name, email, password }, keys)
 
-        if (isValidationError.ok) return isValidationError 
+        if (isValidationError.ok) return isValidationError
 
         const isEmailExist = await isEmailExistInClient(email, shopEmail);
         // console.log(isEmailExist, 'isEmailExist')
-        if (isEmailExist) return  { status: 409, ok : false }
+        if (isEmailExist) return { status: 409, ok: false }
 
 
 
@@ -172,23 +172,23 @@ export default {
 
 
         const _id: string = uuidv4()
-        const crypted_password : string = await bcrypt.hash(password, process.env.SECREAT_ID)
+        const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
         const newClient: any = {
             _id,
             history: [],
             name,
             email,
-            password : crypted_password
+            password: crypted_password
         }
 
         await createFileClient(newClient, shopEmail)
 
-        return {data : newClient, ok : true}
+        return { data: newClient, ok: true }
     },
 
-    async createProduct({ name, price, category, stock, description, isAvailable, rating, type }: productI, shopEmail: string) : Promise<responseControler>  {
+    async createProduct({ name, price, category, stock, description, isAvailable, rating, type }: productI, shopEmail: string): Promise<responseControler> {
         // To do add email exist  module sistem
-        
+
         const keys = {
             name: { rools: ROOLS.text },
             price: { rools: ROOLS.price },
@@ -201,27 +201,53 @@ export default {
         }
         const isValidationError = isAllValidation({ name, price, category, stock, description, isAvailable, rating, type }, keys)
 
-        if (isValidationError.ok) return isValidationError 
+        if (isValidationError.ok) return isValidationError
 
         const _id: string = uuidv4()
         const newProduct: any = {
             _id,
-            name, 
-            price, 
-            category, 
-            stock, 
-            description, 
-            isAvailable, 
+            name,
+            price,
+            category,
+            stock,
+            description,
+            isAvailable,
             rating,
             type
         }
 
         await createFileProduct(newProduct, shopEmail)
 
-        return {data : newProduct, ok : true}
+        return { data: newProduct, ok: true }
     },
 
-    async deleteProduct(productId: string, shopEmail: string) : Promise<responseControler>  {
+    async editProduct({ name, price, category, stock, description, isAvailable, rating, type }: productI, productId: string, shopEmail: string): Promise<responseControler> {
+
+        const keys = {
+            name: { rools: ROOLS.text },
+            price: { rools: ROOLS.price },
+            category: { rools: ROOLS.text },
+            stock: { rools: ROOLS.number },
+            description: { rools: ROOLS.text },
+            isAvailable: { rools: ROOLS.boolean },
+            rating: { rools: ROOLS.number },
+            type: { rools: ROOLS.text }
+        }
+        const isValidationError = isAllValidation({ name, price, category, stock, description, isAvailable, rating, type }, keys)
+        if (isValidationError.ok) return isValidationError
+
+        const result = await readFileProduct(productId, shopEmail)
+        if (!result.ok) return { status: 404, ok: false }
+        const productData = result.data
+
+        const editedProduct = { ...productData, name, price, category, stock, description, isAvailable, rating, type }
+
+        const responseFs = await createFileProduct(editedProduct, shopEmail)
+
+        if (responseFs.ok) return { data: editedProduct, ok: true}
+    },
+
+    async deleteProduct(productId: string, shopEmail: string): Promise<responseControler> {
 
         return await deleteFileProduct(productId, shopEmail)
         // const checkDeleteProduct = await readFileProduct(productId, shopEmail)
@@ -258,15 +284,15 @@ export default {
 
 
 const data = {
-    rool : 'has', name : 'Robert', age : 200, pass : '12345'
+    rool: 'has', name: 'Robert', age: 200, pass: '12345'
 }
 
 
 // const ct = (name, age, pass, rool) => {
-const ct = ({name, age, pass, rool}
-    
-    
-    ) => {
+const ct = ({ name, age, pass, rool }
+
+
+) => {
 
 }
 
@@ -281,3 +307,20 @@ ct(data)
 // }
 
 // const e = a(9); // Promise // .000000000000000000001
+
+// const userOld = {
+//     name: 'user',
+//     age: 1,
+//     _id: 1
+// }
+
+// const name = 'Robert'
+// const age = 100
+
+// const newUser = {
+//     name: 'user',
+//     age: 1,
+//     _id: 1, 
+//     name: 'Robert', 
+//     age: 100
+// }
