@@ -185,6 +185,7 @@ export default {
 
         return { data: newClient, ok: true }
     },
+    
      async deleteClient(emailClient: string, shopEmail: string): Promise<responseControler> { 
         return await deleteFileClient(emailClient, shopEmail)
     },
