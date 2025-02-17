@@ -5,7 +5,6 @@
 const {Router} = require("express")
 const router = Router()
 import controlerShop from '../control/shop'
-import {readFileClient} from '../fs/fs'
 import { responseError } from '../errors/error';
 import { middlewarAccessToShop } from '../middlewar/middlewar';
 
@@ -38,6 +37,22 @@ router.post('/createClient', middlewarAccessToShop, async (req, res) => {
         return res.status(500).json({ text: 'server error', ok : false })
     }
 
+})
+
+
+router.delete('/deleteClient', middlewarAccessToShop, async (req, res) => { 
+    try {
+        const { emailclient, shopemail } = req.headers
+        const response = await controlerShop.deleteClient(emailclient, shopemail)
+        if (!response.ok) {
+            const { status, text } = responseError(404)
+            return res.status(status).json({ text, ok: false })
+        }
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok: false })
+    }
 })
 
 

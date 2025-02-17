@@ -9,7 +9,7 @@ delete shop                    autorisation owner
 edit   shop          existShop autorisation owner
 
 create  client  10   existShop autorisation adminRoots
-delete  client       existShop autorisation adminRoots
+delete  client  10   existShop autorisation adminRoots
 edit    client       existShop autorisation adminRoots
 
 create  product 8    existShop autorisation adminRoots

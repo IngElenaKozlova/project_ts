@@ -131,6 +131,17 @@ export const readFileClient = async (email: string, shopEmail: string) => {
     }
 }
 
+export const deleteFileClient = async (emailClient: string, shopEmail: string) => { 
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + emailClient + '.json'
+        await fs.unlink(pathFile)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
 
 export const createFileProduct = async (productData: productI, shopEmail: string) => {
     try {

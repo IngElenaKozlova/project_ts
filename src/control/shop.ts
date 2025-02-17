@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct } from '../fs/fs';
+import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct, deleteFileClient } from '../fs/fs';
 import {shopI, createClientI, productI} from './interface'
 import {responseControler} from '../interface/response'
 
@@ -184,6 +184,10 @@ export default {
         await createFileClient(newClient, shopEmail)
 
         return {data : newClient, ok : true}
+    },
+
+    async deleteClient(emailClient: string, shopEmail: string): Promise<responseControler> { 
+        return await deleteFileClient(emailClient, shopEmail)
     },
 
     async createProduct({ name, price, category, stock, description, isAvailable, type }: productI, shopEmail: string) : Promise<responseControler>  {
