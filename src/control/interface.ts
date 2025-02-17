@@ -25,11 +25,16 @@ export interface productI {
     type: string
 }
 
+export interface productHistoryI {
+    _id: number,
+    count: number,
+    price: number
+}
+
 export interface historyI {
-    _id: string,
-    clientId: string,
-    date: string, // use like nameFile
-    products: productI[]
+    clientEmail: string,
+    date: number, // UNIX, use like nameFile
+    products: productHistoryI[]
 }
 
 export interface shopI {

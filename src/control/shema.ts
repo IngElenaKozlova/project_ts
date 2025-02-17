@@ -49,7 +49,7 @@ const shop = {
             _id: "dsadsafa",
             email: "user@dasda.com",
             password: "1234",
-            history: ['asda']
+            history: ['1932132131']
         }
     },
     products: {
@@ -66,14 +66,15 @@ const shop = {
     },
     histories: { // every history is different json file with UNIX-name
         'UNIX': {
-            clientId: "dsadsafa",
-            date: "UNIX",
+            clientEmail: "dsadsa@fa.com",
+            date: 2345678976, // UNIX, number
             products: [
-                { _id: 1, count: 5, price: 1200 }
+                { _id: 1, count: 5, price: 1200 },
+                { _id: 2, count: 5, price: 1200 }
             ]
         },
         1932132131: {
-            clientId: "dsadsafa",
+            clientEmail: "dsadsafa",
             date: 1932132131,
             products: [
                 { _id: 1, count: 5, price: 1200 }

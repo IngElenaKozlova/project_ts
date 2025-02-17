@@ -57,3 +57,14 @@ return { ok : true}
 
 
 
+
+
+history 
+// shopemail - headers
+// clientEmail - body 
+
+// products - body (validation if _id exists and count and price are numbers)
+  products: [
+                { _id: 1, count: 5, price: 1200 },
+                { _id: 2, count: 5, price: 1200 }
+            ]
