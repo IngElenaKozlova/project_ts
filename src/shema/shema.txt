@@ -12,9 +12,9 @@ create  client  10   existShop autorisation adminRoots
 delete  client  10   existShop autorisation adminRoots
 edit    client       existShop autorisation adminRoots
 
-create  product 10  existShop autorisation adminRoots
+create  product 10   existShop autorisation adminRoots
 delete  product 10   existShop autorisation adminRoots
-edit    product      existShop autorisation adminRoots
+edit    product 10   existShop autorisation adminRoots
 
 create  history      existShop autorisation adminRoots
 delete  history      existShop autorisation adminRoots
