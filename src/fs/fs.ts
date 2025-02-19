@@ -58,7 +58,6 @@ export const readFileShop = async (email: string) => {
         const result = await fs.readFile(pathFile, 'utf8');
         const jsonData = JSON.parse(result);
         return { ok: true, data: jsonData }
-
     } catch (e) {
         console.log(e)
         return { ok: false }
@@ -84,7 +83,6 @@ export const isEmailExistInClient = async (email: string, shopEmail : string) =>
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'
         await fs.readFile(pathFile, 'utf8');
         return true
-
     } catch (e) {
         console.log(e)
         return false 
@@ -97,7 +95,6 @@ export const checkShopExist = async (shopEmail : string) => {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/shop.json'
         await fs.readFile(pathFile, 'utf8');
         return {ok: true}
-
     } catch (e) {
         console.log(e)
         return { error: 403, ok : false } 
@@ -110,7 +107,6 @@ export const isEmailExistInShop = async (email: string) => {
         const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
         await fs.readFile(pathFile, 'utf8');
         return true
-
     } catch (e) {
         console.log(e)
         return false 
@@ -137,7 +133,17 @@ export const readFileClient = async (email: string, shopEmail: string) => {
         const result = await fs.readFile(pathFile, 'utf8');
         const jsonData = JSON.parse(result);
         return { ok: true, data: jsonData }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
 
+export const deleteFileClient = async (emailClient: string, shopEmail: string) => { 
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + emailClient + '.json'
+        await fs.unlink(pathFile)
+        return { ok: true }
     } catch (e) {
         console.log(e)
         return { ok: false }
@@ -150,6 +156,31 @@ export const createFileProduct = async (productData: productI, shopEmail: string
         const productDataJson = JSON.stringify(productData, null, 2)
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productData._id + '.json'
         await fs.writeFile(pathFile, productDataJson)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const readFileProduct = async (productId: string, shopEmail: string) => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productId + '.json'
+        const result = await fs.readFile(pathFile, 'utf8');
+        const jsonData = JSON.parse(result);
+        return { ok: true, data: jsonData }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const deleteFileProduct = async (productId: string, shopEmail: string) => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productId + '.json'
+        await fs.unlink(pathFile)
         return { ok: true }
     } catch (e) {
         console.log(e)

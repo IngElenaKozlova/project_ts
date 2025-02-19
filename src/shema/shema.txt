@@ -9,12 +9,12 @@ delete shop                    autorisation owner
 edit   shop     10   existShop autorisation owner
 
 create  client  10   existShop autorisation adminRoots
-delete  client       existShop autorisation adminRoots
+delete  client  10   existShop autorisation adminRoots
 edit    client       existShop autorisation adminRoots
 
-create  product 8    existShop autorisation adminRoots
-delete  product      existShop autorisation adminRoots
-edit    product      existShop autorisation adminRoots
+create  product 10   existShop autorisation adminRoots
+delete  product 10   existShop autorisation adminRoots
+edit    product 10   existShop autorisation adminRoots
 
 create  history      existShop autorisation adminRoots
 delete  history      existShop autorisation adminRoots
@@ -42,12 +42,18 @@ res.status(code).json(response)
 
 
 
----- controlFuncion ---
+---- controlFuncion --- create edit
 
 if (valid) valid
 newObject{}
 fs
 return {data : newObject{}, ok : true}
+
+---- controlFuncion --- remove
+
+fs
+if error
+return { ok : true}
 
 
 

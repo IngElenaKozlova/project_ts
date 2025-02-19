@@ -21,6 +21,7 @@ export interface productI {
     stock: number,
     description: string,
     isAvailable: boolean,
+    rating: number, 
     type: string
 }
 

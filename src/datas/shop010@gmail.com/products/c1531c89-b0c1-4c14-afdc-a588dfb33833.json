@@ -1,10 +1,11 @@
 {
-  "_id": "2b048f0b-8eba-4583-9fa4-58121c5694b0",
-  "name": "Laptop",
-  "price": 1200,
+  "_id": "c1531c89-b0c1-4c14-afdc-a588dfb33833",
+  "name": "Laptop1",
+  "price": 1201,
   "category": "Electronics",
-  "stock": 15,
+  "stock": 11,
   "description": "High-performance laptop with 16GB RAM and 512GB SSD storage.",
   "isAvailable": true,
+  "rating": 4.9,
   "type": "LAPTOP"
 }
