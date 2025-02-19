@@ -69,7 +69,7 @@ const shop = {
             clientEmail: "dsadsa@fa.com",
             date: 2345678976, // UNIX, number
             products: [
-                { _id: 1, count: 5, price: 1200 },
+                { _id: 1, count: 5, price: 1200 }, // do not forget to update stock in product !!!
                 { _id: 2, count: 5, price: 1200 }
             ]
         },
