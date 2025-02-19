@@ -8,23 +8,17 @@ import controlerShop from '../control/shop'
 import { responseError } from '../errors/error';
 import { middlewarAccessToShop } from '../middlewar/middlewar';
 
+// client = {
+//     name: "Arnol",
+//     email: "user@dasda.com",
+//     password: "1234"
+// }
 
 router.post('/createClient', middlewarAccessToShop, async (req, res) => {
-    try{
-        // client = {
-        //     name: "Arnol",
-        //     email: "user@dasda.com",
-        //     password: "1234"
-        // }
-        // shopEmail
-        // shopId
-
-        
+    try{     
         const { name, email, password } = req.body;
         const { shopid, shopemail } = req.headers;
-        // console.log(shopid, shopemail)
         const response = await controlerShop.createClient(req.body, shopemail)
-        // console.log(response)
 
         if (response.status) {
             const error = responseError(response.text || response.status)

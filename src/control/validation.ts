@@ -26,7 +26,7 @@ export const ROOLS = {
     number : [VALIDATION.NUMBER],
     boolean: [VALIDATION.BOOLEAN]
 }
-// validator.isEmail('foo@bar.com');
+
 export const isHasErrorCheckData = (data: any, rool: string[], {min} : configValidationI = {}): boolean => {
     const isError = rool.some((elem) => {
         switch (elem) {
@@ -45,8 +45,6 @@ export const isHasErrorCheckData = (data: any, rool: string[], {min} : configVal
             case VALIDATION.MIN : return data <= 0;
             case VALIDATION.NUMBER : return typeof data !== 'number';
             case VALIDATION.BOOLEAN : return typeof data !== 'boolean'
-
-            // case VALIDATION.LENGTH_MIN : return isPassrowd(data)   
         }
     })
 
@@ -67,23 +65,4 @@ export const isAllValidation = (data : any, keys : any) : {ok : boolean, text ? 
     }
     return {ok : false}
 }
-
-
-// let name = 'q'
-// if (name === 'q' || name === 'o') {
-//     console.log(1)
-// } else if (name === 'r') {
-//     console.log(2)
-// } else {
-//     console.log(3)
-
-// }
-
-
-// switch(name) {
-//     case 'q' : 
-//     case 'o' : console.log(1); break;
-//     case 'r' : console.log(2); break;
-//     default : console.log(3)
-// }
 

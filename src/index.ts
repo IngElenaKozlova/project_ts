@@ -1,10 +1,8 @@
-// const express = require('express')
-const dotenv = require('dotenv');
+const dotenv = require('dotenv')
 import express from 'express'
 const shopRoute = require('./routes/shops')
 const clientRoute = require('./routes/clients')
 const productRoute = require('./routes/products')
-// import { createStartPackShop } from './fs/fs';
 
 const start = async () => {
     const app = express();
@@ -14,14 +12,6 @@ const start = async () => {
     app.use('/client', clientRoute)
     app.use('/product', productRoute)
 
-    // app.get('/test', async (req : any, res : any) => {  
-    //     try{
-    //         createStartPackShop()
-    //         return res.status(200).json({ok : Date.now()})
-    //     } catch (e){
-    //     }
-    // })
- 
     const port = +process.env.PORT || 3000;
     const host = process.env.HOST || '127.0.0.1';
 
