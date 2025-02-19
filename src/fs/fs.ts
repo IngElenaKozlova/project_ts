@@ -10,30 +10,6 @@ const FN = {
     SHOP : "/shop.json"
 }
 
-// const readFile = async (name) => {
-//     try {
-//         const pathFile = path.resolve('') + '/src' + '/datas/' + name + '.json'
-//         const result = await fs.readFile(pathFile, 'utf8');
-//         const jsonData = JSON.parse(result);
-//         return { ok: true, data: jsonData }
-//     } catch (e) {
-//         console.log(e)
-//         return { ok: false }
-//     }
-// }
-
-// const createFile = async (name, data) => {
-//     try {
-//         const pathFile = path.resolve('') + '/datas/' + name + '.json'
-//         const dataJson = JSON.stringify(data)
-//         await fs.mkdir(path.resolve('') + '/data', { recursive: true });
-//         await fs.writeFile(pathFile, dataJson)
-//         return { ok: true }
-//     } catch (e) {
-//         console.log(e)
-//         return { ok: false }
-//     }
-// }
 
 export const createStartPackShop = async (shopData: shopI) => {
     try {
@@ -58,6 +34,19 @@ export const readFileShop = async (email: string) => {
         const result = await fs.readFile(pathFile, 'utf8');
         const jsonData = JSON.parse(result);
         return { ok: true, data: jsonData }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const editFileShop = async (shopData: shopI, email: string) => {
+    try {
+        const shopDataJson = JSON.stringify(shopData, null, 2)
+        const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
+        await fs.writeFile(pathFile, shopDataJson)
+        return { ok: true }
     } catch (e) {
         console.log(e)
         return { ok: false }
@@ -175,6 +164,3 @@ export const deleteFileProduct = async (productId: string, shopEmail: string) =>
     }
 }
 
-
-// 1 create route for create shop
-// post (shopName)  return new shop

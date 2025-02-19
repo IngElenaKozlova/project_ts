@@ -1,10 +1,10 @@
 const {Router} = require("express")
 const router = Router()
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'
 import controlerShop from '../control/shop'
 import {readFileShop} from '../fs/fs'
-import { responseError } from '../errors/error';
-// import { isAllValidation } from '../control/validation'
+import { responseError } from '../errors/error'
+
 
 router.post('/createShop', async (req, res) => {
     try {
@@ -46,6 +46,19 @@ router.post('/loginShop', async (req, res) => {
 })
 
 
+router.post('/editShop', async (req, res) => {
+    try {       
+        const response = await controlerShop.editShop(req.body)
+        if (response.status) {
+            const error = responseError(response.text || response.status)
+            return res.status(error.status).json({text : error.text, ok : false})
+        }
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok : false })
+    }
+})
 
 
 module.exports = router
