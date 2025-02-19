@@ -66,6 +66,19 @@ export const readFileShop = async (email: string) => {
 }
 
 
+export const editFileShop = async (shopData: shopI, email: string) => {
+    try {
+        const shopDataJson = JSON.stringify(shopData, null, 2)
+        const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
+        await fs.writeFile(pathFile, shopDataJson)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
 export const isEmailExistInClient = async (email: string, shopEmail : string) => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'

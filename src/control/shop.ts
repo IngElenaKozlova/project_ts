@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct } from '../fs/fs';
+import { createStartPackShop, editFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct, readFileShop } from '../fs/fs';
 import {shopI, createClientI, productI} from './interface'
 import {responseControler} from '../interface/response'
 
@@ -124,6 +124,21 @@ export default {
 
         return {data : newShop, ok : true}
     },
+
+    async editShop({shopName, email}) : Promise<responseControler>{ 
+        const keys = {shopName: { rools: ROOLS.text }} 
+        const isValidationError = isAllValidation({shopName}, keys)
+        if (isValidationError.ok) return isValidationError
+
+        const response = await readFileShop(email)
+        if (!response.ok) return { status: 404, ok: false }
+
+        const currentShop = response.data
+        const editedShop = {...currentShop, shopName}
+        await editFileShop(editedShop, email)
+
+        return {data : editedShop, ok : true}
+    }, 
     
     async createClient({ name, email, password }: createClientI, shopEmail: string) : Promise<responseControler> {
         //TODO add email exist  module sistem
