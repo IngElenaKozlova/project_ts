@@ -5,7 +5,7 @@ adminRoots =
 
 
 create shop     10
-delete shop                    autorisation owner
+delete shop     10             autorisation owner
 edit   shop     10   existShop autorisation owner
 
 create  client  10   existShop autorisation adminRoots
