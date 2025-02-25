@@ -54,6 +54,18 @@ export const editFileShop = async (shopData: shopI, email: string) => {
 }
 
 
+export const deleteFileShop = async (shopEmail: string) => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail
+        await fs.rm(pathFile, { recursive: true, force: true })
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
 export const isEmailExistInClient = async (email: string, shopEmail : string) => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'
