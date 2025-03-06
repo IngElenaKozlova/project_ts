@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcrypt'
+import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, checkShopExist, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct } from '../fs/fs'
+import { createStartPackShop, editFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, checkShopExist, deleteFileClient, createFileProduct, readFileProduct, deleteFileProduct } from '../fs/fs'
 import {shopI, createClientI, productI} from './interface'
 import {responseControler} from '../interface/response'
 
@@ -61,7 +62,20 @@ export default {
         if (isEmailExist) return { status: 409, ok: false }
 
         const _id: string = uuidv4()
-        const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
+        // console.log(password, 'password')
+        // console.log(process.env.SECREAT_ID, 'process.env.SECREAT_ID')
+
+        // const crypted_password: string = await bcrypt.hash(password, +process.env.SECREAT_ID)
+
+        const crypted_password: string = await argon2.hash(password);
+
+
+        // argon2.hash(password)
+        // .then(hash => console.log(hash))
+        // .catch(err => console.error(err))
+
+
+        console.log(JSON.stringify(crypted_password), 'crypted_password')
         const newClient: any = {
             _id,
             history: [],
@@ -74,6 +88,25 @@ export default {
 
         return { data: newClient, ok: true }
     },
+
+    async editClient({name, email}: {name: string, email: string}, shopEmail: string) : Promise<responseControler>{ 
+        const keys = {name: { rools: ROOLS.text }} 
+        const isValidationError = isAllValidation({name}, keys)
+        if (isValidationError.ok) return isValidationError
+
+        const response = await readFileClient(email, shopEmail)
+        if (!response.ok) return { status: 404, ok: false }
+
+        const currentClient = response.data
+        //const password: string = await bcrypt.hash(response.data.password, process.env.SECREAT_ID)
+
+        const password: string = await argon2.hash(response.data.password);
+
+        const editedClient = {...currentClient, name}
+        await editFileClient(editedClient, email, shopEmail)
+
+        return {data : editedClient, ok : true}
+    }, 
     
      async deleteClient(emailClient: string, shopEmail: string): Promise<responseControler> { 
         return await deleteFileClient(emailClient, shopEmail)

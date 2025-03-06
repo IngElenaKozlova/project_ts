@@ -3,14 +3,15 @@ autorisation =
 owner =
 adminRoots = 
 
+// need think hash password over
 
 create shop     10
-delete shop                    autorisation owner
+delete shop     10             autorisation owner
 edit   shop     10   existShop autorisation owner
 
 create  client  10   existShop autorisation adminRoots
 delete  client  10   existShop autorisation adminRoots
-edit    client       existShop autorisation adminRoots
+edit    client   6   existShop autorisation adminRoots
 
 create  product 10   existShop autorisation adminRoots
 delete  product 10   existShop autorisation adminRoots
@@ -57,3 +58,10 @@ return { ok : true}
 
 
 
+
+
+
+
+ "name": "Mr White",
+        "email": "abc213@dasda.com",
+        "password": "User1@"

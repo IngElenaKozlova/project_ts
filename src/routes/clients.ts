@@ -34,6 +34,24 @@ router.post('/createClient', middlewarAccessToShop, async (req, res) => {
 })
 
 
+router.post('/editClient', middlewarAccessToShop, async (req, res) => {
+    try {
+        const { shopemail } = req.headers
+
+        const response = await controlerShop.editClient(req.body, shopemail)
+        if (response.status) {
+            const { status, text } = responseError(response.text || response.status)
+            return res.status(status).json({ text, ok: false })
+        }
+        return res.status(200).json(response)
+
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok: false })
+    }
+})
+
+
 router.delete('/deleteClient', middlewarAccessToShop, async (req, res) => { 
     try {
         const { emailclient, shopemail } = req.headers

@@ -105,7 +105,7 @@ export const createFileClient = async (clientData: clientI, shopEmail: string) =
 
 export const readFileClient = async (email: string, shopEmail: string) => {
     try {
-        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '/shop.json'
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'
         const result = await fs.readFile(pathFile, 'utf8');
         const jsonData = JSON.parse(result);
         return { ok: true, data: jsonData }
@@ -114,6 +114,21 @@ export const readFileClient = async (email: string, shopEmail: string) => {
         return { ok: false }
     }
 }
+
+
+export const editFileClient = async (clientData: clientI, clientEmail: string, shopEmail: string) => {
+    try {
+        console.log(clientEmail)
+        const clientDataJson = JSON.stringify(clientData, null, 2)
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + clientEmail + '.json'
+        await fs.writeFile(pathFile, clientDataJson)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
 
 export const deleteFileClient = async (emailClient: string, shopEmail: string) => { 
     try {

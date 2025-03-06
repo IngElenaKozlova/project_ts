@@ -1,0 +1,7 @@
+{
+  "_id": "ef8caac6-8d15-4ddc-a036-ec14d8645a4f",
+  "history": [],
+  "name": "Mr White",
+  "email": "abc215@dasda.com",
+  "password": "$argon2id$v=19$m=65536,t=3,p=4$EZp91XcBJVJ5MD8fl0MtbA$pT80JhQJCqISznye7fT+jBT0W7o107MJSggKCdeAS28"
+}
