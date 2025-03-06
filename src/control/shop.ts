@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, checkShopExist, deleteFileClient, createFileProduct, readFileProduct, deleteFileProduct } from '../fs/fs'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct } from '../fs/fs'
 import {shopI, createClientI, productI} from './interface'
 import {responseControler} from '../interface/response'
 
@@ -46,6 +46,10 @@ export default {
 
         return {data : editedShop, ok : true}
     }, 
+
+    async deleteShop(shopEmail: string): Promise<responseControler> { 
+        return await deleteFileShop(shopEmail)
+    },
     
     async createClient({ name, email, password }: createClientI, shopEmail: string): Promise<responseControler> {
         const keys = {
