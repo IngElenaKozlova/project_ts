@@ -11,7 +11,7 @@ edit   shop     10   existShop autorisation owner
 
 create  client  10   existShop autorisation adminRoots
 delete  client  10   existShop autorisation adminRoots
-edit    client   6   existShop autorisation adminRoots
+edit    client  10   existShop autorisation adminRoots
 
 create  product 10   existShop autorisation adminRoots
 delete  product 10   existShop autorisation adminRoots

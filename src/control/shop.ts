@@ -78,8 +78,6 @@ export default {
         // .then(hash => console.log(hash))
         // .catch(err => console.error(err))
 
-
-        console.log(JSON.stringify(crypted_password), 'crypted_password')
         const newClient: any = {
             _id,
             history: [],
@@ -89,6 +87,7 @@ export default {
         }
 
         await createFileClient(newClient, shopEmail)
+        delete newClient.password
 
         return { data: newClient, ok: true }
     },
@@ -104,10 +103,11 @@ export default {
         const currentClient = response.data
         //const password: string = await bcrypt.hash(response.data.password, process.env.SECREAT_ID)
 
-        const password: string = await argon2.hash(response.data.password);
+        //const password: string = await argon2.hash(response.data.password);
 
         const editedClient = {...currentClient, name}
         await editFileClient(editedClient, email, shopEmail)
+        delete editedClient.password
 
         return {data : editedClient, ok : true}
     }, 
