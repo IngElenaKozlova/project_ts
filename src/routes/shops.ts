@@ -1,6 +1,7 @@
 const {Router} = require("express")
 const router = Router()
 import bcrypt from 'bcrypt'
+import * as argon2 from "argon2"
 import controlerShop from '../control/shop'
 import {readFileShop} from '../fs/fs'
 import { responseError } from '../errors/error'
@@ -31,7 +32,10 @@ router.post('/loginShop', async (req, res) => {
 
         const currentShop = response.data;
 
-        const ispassword = await bcrypt.compare(password, currentShop.crypted_password)
+        // const ispassword = await bcrypt.compare(password, currentShop.crypted_password)
+
+        const ispassword = await argon2.verify(password, currentShop.crypted_password)
+
         if (!ispassword) return res.status(409).json({ text: 'password is not correct', ok : false})
 
         const shopResponse = { ...currentShop }

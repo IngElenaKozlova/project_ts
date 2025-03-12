@@ -17,7 +17,9 @@ export default {
         if (isEmailExist) return { status: 409, ok: false }
 
         const shopId: string = uuidv4()
-        const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
+        // const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
+
+        const crypted_password: string = await argon2.hash(password);
         const date_create: number = Date.now();
         const newShop: shopI = {
             shopId,
@@ -104,7 +106,7 @@ export default {
         const currentClient = response.data
         //const password: string = await bcrypt.hash(response.data.password, process.env.SECREAT_ID)
 
-        const password: string = await argon2.hash(response.data.password);
+        //const password: string = await argon2.hash(response.data.password);
 
         const editedClient = {...currentClient, name}
         await editFileClient(editedClient, email, shopEmail)
