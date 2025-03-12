@@ -1,0 +1,7 @@
+{
+  "_id": "ce21c8f1-88f6-4a05-9de7-acaad48a04d6",
+  "history": [],
+  "name": "New User 1",
+  "email": "newuser1@gmail.com",
+  "password": "$argon2id$v=19$m=65536,t=3,p=4$J7RXp0qeu/PUc8kv/+ixsQ$NdvUdPyxXcJTu33hcZKAfKEEnYElWYVBYAeOTboctjo"
+}
