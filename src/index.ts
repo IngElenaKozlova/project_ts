@@ -1,10 +1,14 @@
-const dotenv = require('dotenv')
+require('dotenv').config()
 import express from 'express'
 const shopRoute = require('./routes/shops')
 const clientRoute = require('./routes/clients')
 const productRoute = require('./routes/products')
 
+
 const start = async () => {
+
+
+
     const app = express();
     app.use(express.json());
 
