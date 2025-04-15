@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid'
-import bcrypt from 'bcrypt'
+// import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct } from '../fs/fs'
-import {shopI, createClientI, productI} from './interface'
-import {responseControler} from '../interface/response'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory } from '../fs/fs'
+import { shopI, createClientI, clientI, productI, historyI, productHistoryParamsI, productHistoryI, historyParamsI} from './interface'
+import { responseControler } from '../interface/response'
 
 
 export default {
@@ -17,7 +17,6 @@ export default {
         if (isEmailExist) return { status: 409, ok: false }
 
         const shopId: string = uuidv4()
-        // const crypted_password: string = await bcrypt.hash(password, process.env.SECREAT_ID)
 
         const crypted_password: string = await argon2.hash(password);
         const date_create: number = Date.now();
@@ -29,9 +28,9 @@ export default {
             date_create
         }
 
-        await createStartPackShop(newShop)
+        const result = await createStartPackShop(newShop)
 
-        return { data: newShop, ok: true }
+        return { data: newShop, ok: result.ok }
     },
 
     async editShop({shopName, email}) : Promise<responseControler>{ 
@@ -44,9 +43,9 @@ export default {
 
         const currentShop = response.data
         const editedShop = {...currentShop, shopName}
-        await editFileShop(editedShop, email)
+        const result = await editFileShop(editedShop, email)
 
-        return {data : editedShop, ok : true}
+        return {data : editedShop, ok : result.ok}
     }, 
 
     async deleteShop(shopEmail: string): Promise<responseControler> { 
@@ -68,17 +67,8 @@ export default {
         if (isEmailExist) return { status: 409, ok: false }
 
         const _id: string = uuidv4()
-        // console.log(password, 'password')
-        // console.log(process.env.SECREAT_ID, 'process.env.SECREAT_ID')
-
-        // const crypted_password: string = await bcrypt.hash(password, +process.env.SECREAT_ID)
 
         const crypted_password: string = await argon2.hash(password);
-
-
-        // argon2.hash(password)
-        // .then(hash => console.log(hash))
-        // .catch(err => console.error(err))
 
         const newClient: any = {
             _id,
@@ -88,10 +78,10 @@ export default {
             password: crypted_password
         }
 
-        await createFileClient(newClient, shopEmail)
+        const result = await createFileClient(newClient, shopEmail)
         delete newClient.password
 
-        return { data: newClient, ok: true }
+        return { data: newClient, ok: result.ok }
     },
 
     async editClient({name, email}: {name: string, email: string}, shopEmail: string) : Promise<responseControler>{ 
@@ -103,15 +93,12 @@ export default {
         if (!response.ok) return { status: 404, ok: false }
 
         const currentClient = response.data
-        //const password: string = await bcrypt.hash(response.data.password, process.env.SECREAT_ID)
-
-        //const password: string = await argon2.hash(response.data.password);
 
         const editedClient = {...currentClient, name}
-        await editFileClient(editedClient, email, shopEmail)
+        const result = await editFileClient(editedClient, email, shopEmail)
         delete editedClient.password
 
-        return {data : editedClient, ok : true}
+        return {data : editedClient, ok : result.ok}
     }, 
     
      async deleteClient(emailClient: string, shopEmail: string): Promise<responseControler> { 
@@ -147,8 +134,8 @@ export default {
             type
         }
 
-        await createFileProduct(newProduct, shopEmail)
-        return { data: newProduct, ok: true }
+        const result = await createFileProduct(newProduct, shopEmail)
+        return { data: newProduct, ok: result.ok }
     },
 
     async editProduct({ name, price, category, stock, description, isAvailable, rating, type }: productI, productId: string, shopEmail: string): Promise<responseControler> {
@@ -174,11 +161,81 @@ export default {
 
         const responseFs = await createFileProduct(editedProduct, shopEmail)
 
-        if (responseFs.ok) return { data: editedProduct, ok: true}
+        if (responseFs.ok) return { data: editedProduct, ok: responseFs.ok}
     },
 
     async deleteProduct(productId: string, shopEmail: string): Promise<responseControler> {
         return await deleteFileProduct(productId, shopEmail)
+    },
+
+    async createHistory({ clientEmail, products }: historyParamsI, shopEmail: string): Promise<responseControler> {
+        
+        let isValidationError : boolean | {text ? : string, status ? : number, ok : boolean} = false 
+
+        const keys = {
+            count: { rools: ROOLS.number }
+        }
+
+        products.forEach((product : productHistoryParamsI) => { 
+            const validationError = isAllValidation({ count : product.count }, keys)
+            if (validationError.ok) {
+                isValidationError = validationError;
+            }
+        })
+
+        if (isValidationError) return isValidationError
+
+        const isEmailExist = await isEmailExistInClient(clientEmail, shopEmail)
+        if (!isEmailExist) return { status: 409, ok: false }
+
+        let historyProducts = []
+        let updatedProducts = []
+
+        for (let index = 0; index < products.length; index++) {
+            const product = products[index]
+            const result = await readFileProduct(product._id, shopEmail)
+            if (!result.ok) return { status: 404, ok: false }
+            
+            const productData = result.data
+            const productWithPrice : productHistoryI = {
+                _id : productData._id,
+                count : product.count,
+                price : productData.price * product.count
+            }
+            historyProducts.push(productWithPrice)
+
+            const stock = productData.stock - product.count
+            const updatedProduct = {...productData, stock}
+
+            updatedProducts.push(updatedProduct)
+        }
+        
+        await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail))) // update product in json
+    
+        const newHistory: historyI = { 
+            clientEmail,
+            date: Date.now(),
+            products : historyProducts 
+        }
+
+        const result = await createFileHistory(newHistory, shopEmail) // create new history
+
+        const currentClient = await readFileClient(clientEmail, shopEmail)
+        const currentClientData = currentClient.data
+
+        const updatedClient: clientI = {
+            _id: currentClient.data._id,
+            history: currentClientData.history, 
+            name: currentClientData.name,
+            email: currentClientData.email,
+            password: currentClientData.password
+        }
+
+        updatedClient.history.push(newHistory.date)
+
+        const result2 = await editFileClient(updatedClient, clientEmail, shopEmail) // update existing client
+        if (!result2) return {status : 500, ok: false}
+
+        return { data: newHistory, ok: result.ok }
     }
 }
-

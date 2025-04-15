@@ -34,12 +34,12 @@ router.post('/loginShop', async (req, res) => {
 
         // const ispassword = await bcrypt.compare(password, currentShop.crypted_password)
 
-        const ispassword = await argon2.verify(password, currentShop.crypted_password)
+        const ispassword = await argon2.verify(password, currentShop.password)
 
         if (!ispassword) return res.status(409).json({ text: 'password is not correct', ok : false})
 
         const shopResponse = { ...currentShop }
-        delete shopResponse.crypted_password
+        delete shopResponse.password
 
         return res.status(200).json(shopResponse)
 

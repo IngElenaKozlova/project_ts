@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-import {shopI, clientI, productI} from '../control/interface'
+import {shopI, clientI, productI, historyI} from '../control/interface'
 // import { v4 as uuidv4 } from 'uuid';
 
 const FN = {
@@ -11,7 +11,7 @@ const FN = {
 }
 
 
-export const createStartPackShop = async (shopData: shopI) => {
+export const createStartPackShop = async (shopData: shopI) : Promise<{ok : boolean}>=> {
     try {
 
         const shopDataJson = JSON.stringify(shopData, null, 2)
@@ -28,7 +28,7 @@ export const createStartPackShop = async (shopData: shopI) => {
     }
 }
 
-export const readFileShop = async (email: string) => {
+export const readFileShop = async (email: string) : Promise<{ok : boolean, data ? : shopI}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
         const result = await fs.readFile(pathFile, 'utf8');
@@ -41,7 +41,7 @@ export const readFileShop = async (email: string) => {
 }
 
 
-export const editFileShop = async (shopData: shopI, email: string) => {
+export const editFileShop = async (shopData: shopI, email: string) : Promise<{ok : boolean}> => {
     try {
         const shopDataJson = JSON.stringify(shopData, null, 2)
         const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
@@ -54,7 +54,7 @@ export const editFileShop = async (shopData: shopI, email: string) => {
 }
 
 
-export const deleteFileShop = async (shopEmail: string) => {
+export const deleteFileShop = async (shopEmail: string) : Promise<{ok : boolean}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail
         await fs.rm(pathFile, { recursive: true, force: true })
@@ -66,7 +66,7 @@ export const deleteFileShop = async (shopEmail: string) => {
 }
 
 
-export const isEmailExistInClient = async (email: string, shopEmail : string) => {
+export const isEmailExistInClient = async (email: string, shopEmail : string) : Promise<boolean> => { 
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'
         await fs.readFile(pathFile, 'utf8');
@@ -78,7 +78,7 @@ export const isEmailExistInClient = async (email: string, shopEmail : string) =>
 }
 
 
-export const checkShopExist = async (shopEmail : string) => {
+export const checkShopExist = async (shopEmail : string) : Promise<{ok : boolean, error ? : number}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/shop.json'
         await fs.readFile(pathFile, 'utf8');
@@ -90,7 +90,7 @@ export const checkShopExist = async (shopEmail : string) => {
 }
 
 
-export const isEmailExistInShop = async (email: string) => {
+export const isEmailExistInShop = async (email: string) : Promise<boolean> => { 
     try {
         const pathFile = path.resolve('') + '/src/datas/' + email + '/shop.json'
         await fs.readFile(pathFile, 'utf8');
@@ -102,7 +102,7 @@ export const isEmailExistInShop = async (email: string) => {
 }
 
 
-export const createFileClient = async (clientData: clientI, shopEmail: string) => {
+export const createFileClient = async (clientData: clientI, shopEmail: string) : Promise<{ok : boolean}> => {
     try {
         const clientDataJson = JSON.stringify(clientData, null, 2)
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + clientData.email + '.json'
@@ -115,7 +115,7 @@ export const createFileClient = async (clientData: clientI, shopEmail: string) =
 }
 
 
-export const readFileClient = async (email: string, shopEmail: string) => {
+export const readFileClient = async (email: string, shopEmail: string) : Promise<{ok : boolean, data ? : clientI}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + email + '.json'
         const result = await fs.readFile(pathFile, 'utf8');
@@ -128,9 +128,8 @@ export const readFileClient = async (email: string, shopEmail: string) => {
 }
 
 
-export const editFileClient = async (clientData: clientI, clientEmail: string, shopEmail: string) => {
+export const editFileClient = async (clientData: clientI, clientEmail: string, shopEmail: string) : Promise<{ok : boolean}> => {
     try {
-        console.log(clientEmail)
         const clientDataJson = JSON.stringify(clientData, null, 2)
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + clientEmail + '.json'
         await fs.writeFile(pathFile, clientDataJson)
@@ -142,7 +141,7 @@ export const editFileClient = async (clientData: clientI, clientEmail: string, s
 }
 
 
-export const deleteFileClient = async (emailClient: string, shopEmail: string) => { 
+export const deleteFileClient = async (emailClient: string, shopEmail: string) : Promise<{ok : boolean}> => { 
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + emailClient + '.json'
         await fs.unlink(pathFile)
@@ -154,7 +153,7 @@ export const deleteFileClient = async (emailClient: string, shopEmail: string) =
 }
 
 
-export const createFileProduct = async (productData: productI, shopEmail: string) => {
+export const createFileProduct = async (productData: productI, shopEmail: string) : Promise<{ok : boolean}> => {
     try {
         const productDataJson = JSON.stringify(productData, null, 2)
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productData._id + '.json'
@@ -167,7 +166,7 @@ export const createFileProduct = async (productData: productI, shopEmail: string
 }
 
 
-export const readFileProduct = async (productId: string, shopEmail: string) => {
+export const readFileProduct = async (productId: string, shopEmail: string) : Promise<{ok : boolean, data ? : productI}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productId + '.json'
         const result = await fs.readFile(pathFile, 'utf8');
@@ -180,10 +179,23 @@ export const readFileProduct = async (productId: string, shopEmail: string) => {
 }
 
 
-export const deleteFileProduct = async (productId: string, shopEmail: string) => {
+export const deleteFileProduct = async (productId: string, shopEmail: string) : Promise<{ok : boolean}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/products/' + productId + '.json'
         await fs.unlink(pathFile)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const createFileHistory = async (historyData: historyI, shopEmail: string) : Promise<{ok : boolean}> => {
+    try {
+        const historyDataJson = JSON.stringify(historyData, null, 2)
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/histories/' + historyData.date + '.json'
+        await fs.writeFile(pathFile, historyDataJson)
         return { ok: true }
     } catch (e) {
         console.log(e)

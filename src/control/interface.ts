@@ -1,6 +1,6 @@
 export interface clientI {
     _id: string,
-    history: string[],
+    history: number[],
 
     name: string,
     email: string,
@@ -14,7 +14,7 @@ export interface createClientI {
 }
 
 export interface productI {
-    _id: number,
+    _id: string,
     name: string,
     price: number,
     category: string,
@@ -26,15 +26,26 @@ export interface productI {
 }
 
 export interface productHistoryI {
-    _id: number,
+    _id: string,
     count: number,
     price: number
+}
+
+export interface productHistoryParamsI {
+    _id: string,
+    count: number
 }
 
 export interface historyI {
     clientEmail: string,
     date: number, // UNIX, use like nameFile
     products: productHistoryI[]
+}
+
+export interface historyParamsI {
+    clientEmail: string,
+    // date: number, // UNIX, use like nameFile
+    products: productHistoryParamsI[]
 }
 
 export interface shopI {

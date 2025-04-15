@@ -83,9 +83,35 @@ const shop = {
     }
 }
 
+products: [
+    { "_id": "c1531c89-b0c1-4c14-afdc-a588dfb33833", count: 5}
+]
+
+products: [
+    {
+        "_id": "c1531c89-b0c1-4c14-afdc-a588dfb33833",
+        "name": "Laptop1",
+        "price": 1201,
+        "category": "Electronics",
+        "stock": 11,
+        "description": "High-performance laptop with 16GB RAM and 512GB SSD storage.",
+        "isAvailable": true,
+        "rating": 4.9,
+        "type": "LAPTOP"
+      }
+]
+// clientEmail  [{_id: 1, count: 5}]
+
 // 1 registration
 
 
 // 
 
+
+// const res = {
+//     clientEmail : 'user@gma@sad',
+//     products : [
+
+//     ]
+// }
 

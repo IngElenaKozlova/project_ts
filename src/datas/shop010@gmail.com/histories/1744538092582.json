@@ -1,0 +1,16 @@
+{
+  "clientEmail": "userNew1@gmail.com",
+  "date": 1744538092582,
+  "products": [
+    {
+      "_id": "copy1-b0c1-4c14-afdc-a588dfb33833",
+      "count": 1187,
+      "price": 1201
+    },
+    {
+      "_id": "copy-b0c1-4c14-afdc-a588dfb33833",
+      "count": 114,
+      "price": 1505
+    }
+  ]
+}
