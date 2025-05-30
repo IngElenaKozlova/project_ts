@@ -239,7 +239,7 @@ export default {
         return { data: newHistory, ok: result.ok }
     },
 
-    async deleteHistory(shopEmail: string, clientEmail: string, historyId: string): Promise<responseControler> {
+    async deleteHistory(shopEmail: string, clientEmail: string, historyId: number): Promise<responseControler> {
        const res1 = await deleteFileHistory(shopEmail, historyId)
        const res2 = await deleteHistoryFromClient(shopEmail, clientEmail, historyId)
         if (!res1) return {status : 500, ok: false, text : "deleteFileHistory"}

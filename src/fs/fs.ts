@@ -204,10 +204,9 @@ export const createFileHistory = async (historyData: historyI, shopEmail: string
 }
 
 
-export const deleteFileHistory = async (shopEmail: string, historyId: string) : Promise<{ok : boolean}> => {
+export const deleteFileHistory = async (shopEmail: string, historyId: number) : Promise<{ok : boolean}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/histories/' + historyId + '.json'
-        console.log(pathFile, "0")
         await fs.unlink(pathFile)
         return { ok: true }
     } catch (e) {
@@ -217,19 +216,14 @@ export const deleteFileHistory = async (shopEmail: string, historyId: string) : 
 }
 
 
-export const deleteHistoryFromClient = async (shopEmail: string, clientEmail: string, historyId: string) : Promise<{ok : boolean}> => {
+export const deleteHistoryFromClient = async (shopEmail: string, clientEmail: string, historyId: number) : Promise<{ok : boolean}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + clientEmail + '.json'
-        // console.log(pathFile, "1")
         const result = await fs.readFile(pathFile, 'utf8')
-        // console.log(result, "2")
         const jsonDataClient = JSON.parse(result)
-        // console.log(jsonDataClient, "3")
         const histories = jsonDataClient.history
-        // console.log(histories, "4")
         const historiesWithoutDeletedHistory = histories.filter((elem) => elem !== historyId)
         jsonDataClient.history = historiesWithoutDeletedHistory
-        console.log(jsonDataClient, "5")
         await editFileClient(jsonDataClient, clientEmail, shopEmail)
         return {ok: true}
     } catch (e) {
