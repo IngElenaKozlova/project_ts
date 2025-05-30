@@ -21,7 +21,7 @@ create  history 10   existShop autorisation adminRoots
 delete  history 10   existShop autorisation adminRoots
 edit    history      existShop autorisation adminRoots
 
-create  admin        existShop autorisation adminRoots
+create  admin    6   existShop autorisation adminRoots
 delete  admin        existShop autorisation adminRoots
 edit    admin        existShop autorisation adminRoots
 
@@ -74,3 +74,14 @@ history
  "name": "Mr White",
         "email": "abc213@dasda.com",
         "password": "User1@"
+
+
+
+
+(101, 117)
+
+101 create client 
+102 edit client 
+103 remove client 
+
+117 edit name client 
