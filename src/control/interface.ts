@@ -66,6 +66,11 @@ export interface adminI {
   
 }
 
+export interface adminAccessI {
+    email: string
+}
+
+
 // const shop = {
 //     roots : ['0f96b062-d562-42f8-9975-162abfc97ded' = _id of adminI] 
 

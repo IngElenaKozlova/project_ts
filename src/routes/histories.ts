@@ -21,4 +21,28 @@ router.post('/createHistory', middlewarAccessToShop, async (req, res) => {
     }
 })
 
+router.delete('/deleteHistory', middlewarAccessToShop, async (req, res) => {
+    try{     
+        const {shopemail, clientemail} = req.headers;
+        // console.log(shopEmail, 'shopEmail')
+        // console.log(clientEmail, 'clientEmail')
+        // console.log(req.body, 'req.body')
+        // console.log(req.headers, 'req.headers')
+        const response = await controlerShop.deleteHistory(shopemail, clientemail, req.body.historyId)
+
+        if (response.status) {
+            const error = responseError(response.text || response.status)
+            return res.status(error.status).json({text : error.text, ok : false})
+        }
+        return res.status(200).json(response)
+
+    } catch (e){
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok : false })
+    }
+})
+
+
+
+
 module.exports = router

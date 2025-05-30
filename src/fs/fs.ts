@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-import {shopI, clientI, productI, historyI} from '../control/interface'
+import {shopI, clientI, productI, historyI, adminAccessI} from '../control/interface'
 // import { v4 as uuidv4 } from 'uuid';
 
 const FN = {
@@ -203,3 +203,65 @@ export const createFileHistory = async (historyData: historyI, shopEmail: string
     }
 }
 
+
+export const deleteFileHistory = async (shopEmail: string, historyId: string) : Promise<{ok : boolean}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/histories/' + historyId + '.json'
+        console.log(pathFile, "0")
+        await fs.unlink(pathFile)
+        return { ok: true }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const deleteHistoryFromClient = async (shopEmail: string, clientEmail: string, historyId: string) : Promise<{ok : boolean}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/clients/' + clientEmail + '.json'
+        // console.log(pathFile, "1")
+        const result = await fs.readFile(pathFile, 'utf8')
+        // console.log(result, "2")
+        const jsonDataClient = JSON.parse(result)
+        // console.log(jsonDataClient, "3")
+        const histories = jsonDataClient.history
+        // console.log(histories, "4")
+        const historiesWithoutDeletedHistory = histories.filter((elem) => elem !== historyId)
+        jsonDataClient.history = historiesWithoutDeletedHistory
+        console.log(jsonDataClient, "5")
+        await editFileClient(jsonDataClient, clientEmail, shopEmail)
+        return {ok: true}
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
+export const readFileAdmin = async (shopEmail: string) : Promise<{ok : boolean, data ? : any}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + 'admins.json'
+        const result = await fs.readFile(pathFile, 'utf8');
+        const jsonData = JSON.parse(result);
+        return { ok: true, data: jsonData }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+export const checkIfAdmin = async (shopEmail: string, email: string) : Promise<{ok : boolean, error ? : number, data? : adminAccessI[]}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/admins.json'
+        const response = await fs.readFile(pathFile, 'utf8')      
+        if (!response) return { error: 404, ok: false}
+        const jsonData = JSON.parse(response)
+        const confirmation = jsonData.find((elem) => elem.email === email)
+        if (!confirmation) return { error: 404, ok: false}      
+        return {ok: true, data : jsonData}
+    } catch (e) {
+        console.log(e)
+        return { error: 500, ok: false } 
+    }
+}

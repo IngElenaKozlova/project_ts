@@ -6,7 +6,7 @@ const {Router} = require("express")
 const router = Router()
 import controlerShop from '../control/shop'
 import { responseError } from '../errors/error';
-import { middlewarAccessToShop } from '../middlewar/middlewar';
+import { middlewarAccessToShop, middlewarAdminAccess } from '../middlewar/middlewar';
 
 // client = {
 //     name: "Arnol",
@@ -14,7 +14,7 @@ import { middlewarAccessToShop } from '../middlewar/middlewar';
 //     password: "1234"
 // }
 
-router.post('/createClient', middlewarAccessToShop, async (req, res) => {
+router.post('/createClient', middlewarAccessToShop, middlewarAdminAccess, async (req, res) => {
     try{     
         const { name, email, password } = req.body;
         const { shopid, shopemail } = req.headers;

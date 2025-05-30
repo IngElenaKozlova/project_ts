@@ -4,6 +4,7 @@ const shopRoute = require('./routes/shops')
 const clientRoute = require('./routes/clients')
 const productRoute = require('./routes/products')
 const historyRoute = require('./routes/histories')
+const adminRoute = require('./routes/admins')
 
 
 const start = async () => {
@@ -19,6 +20,7 @@ const start = async () => {
     app.use('/client', clientRoute)
     app.use('/product', productRoute)
     app.use('/history', historyRoute)
+    app.use('/admin', adminRoute)
 
 
     app.listen(port, host, () => {

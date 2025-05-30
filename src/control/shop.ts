@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory } from '../fs/fs'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient} from '../fs/fs'
 import { shopI, createClientI, clientI, productI, historyI, productHistoryParamsI, productHistoryI, historyParamsI} from './interface'
 import { responseControler } from '../interface/response'
 
@@ -237,5 +237,33 @@ export default {
         if (!result2) return {status : 500, ok: false}
 
         return { data: newHistory, ok: result.ok }
-    }
+    },
+
+    async deleteHistory(shopEmail: string, clientEmail: string, historyId: string): Promise<responseControler> {
+       const res1 = await deleteFileHistory(shopEmail, historyId)
+       const res2 = await deleteHistoryFromClient(shopEmail, clientEmail, historyId)
+        if (!res1) return {status : 500, ok: false, text : "deleteFileHistory"}
+        if (!res2) return {status : 501, ok: false, text : "deleteHistoryFromClient"}
+        return {ok: true}
+    },
+
+    async createAdmin(adminEmail: string, shopEmail: string): Promise<responseControler> {
+
+        const newAdmin: any = {
+            email: adminEmail
+        }
+
+        const result = await readFileAdmin(shopEmail)
+        if (!result.ok) return { status: 404, ok: false }
+
+        const adminsData = result.data
+        adminsData.push(newAdmin)
+
+        return { data: newAdmin, ok: result.ok }
+    },
 }
+
+console.log(n) // undefined
+var n = 1;
+console.log(n) // 1
+

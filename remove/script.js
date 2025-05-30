@@ -152,14 +152,79 @@ const createControlProduct = (products) => {
 
     ; (function () {
 
-        const controlProducts2 = createControlProduct([])
-        const controlProducts3 = createControlProduct([])
+        // const controlProducts2 = createControlProduct([])
+        // const controlProducts3 = createControlProduct([])
 
-        controlProducts2.adNewProduct()
-        controlProducts2.adNewProduct()
-        console.log(controlProducts3.data)
-        console.log(controlProducts2.data)
+        // controlProducts2.adNewProduct()
+        // controlProducts2.adNewProduct()
+        // console.log(controlProducts3.data)
+        // console.log(controlProducts2.data)
 
 
     })();
 
+
+
+    const cinemas = [
+        {
+          name: "Grand Cinema",
+          location: "Downtown",
+          year : 2012,
+          movies: [
+            { title: "Inception", genre: "Sci-Fi", duration: 148 },
+            { title: "The Dark Knight", genre: "Action", duration: 152 }
+          ]
+        },
+        {
+          name: "Starplex",
+          location: "Uptown",
+          year : 2010,
+          movies: [
+            { title: "Interstellar", genre: "Sci-Fi", duration: 169 },
+            { title: "La La Land", genre: "Musical", duration: 128 }
+          ]
+        },
+        {
+          name: "Cineworld",
+          location: "Midtown",
+          year : 2000,
+         // index : 2,
+          movies: [
+            { title: "Avengers: Endgame", genre: "Action", duration: 181 },
+            { title: "Parasite", genre: "Thriller", duration: 132 }
+          ]
+        }
+      ];
+// 
+      const a = {b : 22, index : 2}
+      const l = a.index = 2;
+      const nameToFind = "Cineworld";
+      
+
+
+      const findName = cinemas.find((elem) => elem.name === nameToFind)
+
+
+      const new2MovCinemas = cinemas.map((elem) => ({name : elem.name, location : elem.location}))
+
+      
+      const newMovCinemas = cinemas.map((elem) => ({...elem, movies :  elem.movies.filter((mov) => mov.duration > 140)}))
+      
+
+    //   const newMovCinemas = cinemas.map((elem) => {
+    //         elem.movies = elem.movies.filter((mov) => mov.duration > 140)
+    //         return elem
+    //   })
+
+      
+// const newCinemas = cinemas.map((elem, i) => ({...elem, index : i}));
+// const newCinemas = cinemas.map((elem, i) => {
+//     elem.index = i
+//     return elem
+// });
+const [one, two, three] = cinemas;
+
+
+console.log(newMovCinemas)
+// [true, true, false]
+// [0, 1, 2]

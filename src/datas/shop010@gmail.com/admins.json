@@ -1,0 +1,9 @@
+[
+    {
+        "email" : "userAdmin1@gmail.com",
+        "rools" : [100, 102, 114]
+    },
+    {
+        "email" : "userUser1@gmail.com"
+    }
+]
