@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient} from '../fs/fs'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory} from '../fs/fs'
 import { shopI, createClientI, clientI, productI, historyI, productHistoryParamsI, productHistoryI, historyParamsI} from './interface'
 import { responseControler } from '../interface/response'
 
@@ -237,6 +237,142 @@ export default {
         if (!result2) return {status : 500, ok: false}
 
         return { data: newHistory, ok: result.ok }
+    },
+
+    async editHistory({ clientEmail, products }: historyParamsI, shopEmail: string, historyId: number): Promise<responseControler> {
+        let isValidationError : boolean | {text ? : string, status ? : number, ok : boolean} = false 
+        const keys = {
+            count: { rools: ROOLS.number }
+        }
+        products.forEach((product : productHistoryParamsI) => { 
+            const validationError = isAllValidation({ count : product.count }, keys)
+            if (validationError.ok) {
+                isValidationError = validationError;
+            }
+        })
+
+        if (isValidationError) return isValidationError
+        
+        // 1.3
+
+        const isEmailExist = await isEmailExistInClient(clientEmail, shopEmail)
+        if (!isEmailExist) return { status: 409, ok: false }
+
+        // 1.1 1.2
+
+        let historyProducts = []
+        let updatedProducts = []
+
+        for (let index = 0; index < products.length; index++) {
+            const product = products[index]
+            const resultProd = await readFileProduct(product._id, shopEmail)
+            if (!resultProd.ok) return { status: 404, ok: false }
+
+            const resultHist = await readFileHistory(historyId, shopEmail)
+            if (!resultHist.ok) return { status: 404, ok: false }
+            
+            const productData = resultProd.data
+            const count = product.count
+
+            const historyData = resultHist.data
+            const historyProdCount = historyData.products.find((elem) => elem._id === product._id)
+
+            const stock = productData.stock + (historyProdCount.count - count)
+
+
+            //  c = 4 h = 5  all = 10
+            // r= h - c // all + r
+
+            //  c = 5 h = 4  all = 10
+            // r= h - c // all + r
+
+            //  c = 5 h = 4  all = -10
+            // r= h - c // all + r
+
+            //  c = 4 h = 5  all = -10
+            // r= h - c // all + r
+
+
+            // const stock = productData.stock - product.count //! if -productData.stock logica no work -12 - 1 = -13 (-11)
+            // const productWithPrice : productHistoryI = {
+            //     _id : productData._id,
+            //     count : product.count,
+            //     price : productData.price * product.count
+            // }
+            
+            
+            const updatedProduct = {...productData, stock}
+            const p =  await createFileProduct(updatedProduct, shopEmail)
+            console.log(p)
+            // historyProducts.push(updatedProduct)
+            // const updatedProduct = {...productData, stock}
+
+            // updatedProducts.push(updatedProduct)
+        }
+        return
+        await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail))) // update product in json
+
+        const result2 = await readFileHistory(historyId, shopEmail)
+        if (!result2.ok) return { status: 404, ok: false }
+        let historyData = result2.data
+
+        const editedHistory: historyI = { 
+            clientEmail,
+            date: historyData.date,
+            products : historyProducts 
+        }
+
+        await createFileHistory(editedHistory, shopEmail)
+
+        // const result = await readFileHistory(historyId, shopEmail)
+        // if (!result.ok) return { status: 404, ok: false }
+        // const historyData = result.data
+
+        // const editedProductInHistory = { ...historyData, stock }
+        // const responseFs = await createFileProduct(editedProductInHistory, shopEmail)
+        // if (responseFs.ok) return { data: editedProductInHistory, ok: responseFs.ok}
+
+
+
+        // const result2 = await createFileHistory(editedHistory, shopEmail) // create new updated history
+
+
+        // const currentClient = await readFileClient(clientEmail, shopEmail)
+        // const currentClientData = currentClient.data
+        // const updatedClient: clientI = {
+        //     _id: currentClient.data._id,
+        //     history: currentClientData.history, 
+        //     name: currentClientData.name,
+        //     email: currentClientData.email,
+        //     password: currentClientData.password
+        // }
+        // updatedClient.history.push(newHistory.date)
+        // const result2 = await editFileClient(updatedClient, clientEmail, shopEmail) // update existing client
+        // if (!result2) return {status : 500, ok: false}
+
+        
+        return { data: editedHistory, ok: true }
+        // create plan for editHistory
+        //? 1 add validation
+        //? 1.1 check exist user
+        //? 1.2 check exist shop 
+        //? 1.3 check validation data
+        
+        //? 2 get all need products
+        //? 2.1 check exist product 
+
+        //? 3 get one need history
+        //? 3.1 check exist history 
+
+        //? 4 logical change
+        //? 4.1 change products
+        //? 4.2 change history
+
+        //? 5 save products
+        //? 6 save history
+
+        //? 7 return history 
+
     },
 
     async deleteHistory(shopEmail: string, clientEmail: string, historyId: number): Promise<responseControler> {
