@@ -300,13 +300,11 @@ export default {
 
             const updatedProduct = {...productData, stock}
             updatedProducts.push(updatedProduct)
-
-            //     return {ok : resultCreateProd.ok}
         }
 
         const createUpdatedProduct = await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail)))     
 
-        
+
         // const errorCreate = createUpdatedProduct.find((elem) => elem.ok === false)
         // const errorCreate = createUpdatedProduct.find(({ok}) => !ok)
         // if (errorCreate) return {data: errorCreate, ok: false}
