@@ -3,7 +3,7 @@
   "name": "Laptop1",
   "price": 1201,
   "category": "Electronics",
-  "stock": 9,
+  "stock": 10,
   "description": "High-performance laptop with 16GB RAM and 512GB SSD storage.",
   "isAvailable": true,
   "rating": 4.9,

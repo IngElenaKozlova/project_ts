@@ -209,6 +209,7 @@ export default {
 
             updatedProducts.push(updatedProduct)
         }
+
         
         await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail))) // update product in json
     
@@ -257,6 +258,7 @@ export default {
         if (!isEmailExist) return { status: 409, ok: false }
 
         let historyProducts = []
+        let updatedProducts = []
 
         const resultHist = await readFileHistory(historyId, shopEmail)
         if (!resultHist.ok) return { status: 404, ok: false }
@@ -297,12 +299,25 @@ export default {
             historyProducts.push(updatedProdHist)
 
             const updatedProduct = {...productData, stock}
-            
-            const resultCreateProd = await createFileProduct(updatedProduct, shopEmail)
-            if (!resultCreateProd) return {status : 500, ok: false}
-       //     return {ok : resultCreateProd.ok}
+            updatedProducts.push(updatedProduct)
+
+            //     return {ok : resultCreateProd.ok}
         }
 
+        const createUpdatedProduct = await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail)))     
+
+        
+        // const errorCreate = createUpdatedProduct.find((elem) => elem.ok === false)
+        // const errorCreate = createUpdatedProduct.find(({ok}) => !ok)
+        // if (errorCreate) return {data: errorCreate, ok: false}
+
+        // const errorCreate = createUpdatedProduct.filter(({ok}) => !ok)
+        // if (errorCreate.length) return {data: errorCreate, ok: false}     
+        
+        // const resultCreateProd = await createFileProduct(updatedProduct, shopEmail)
+        // if (!resultCreateProd) return {status : 500, ok: false}
+
+        
         const editedHistory: historyI = { 
             clientEmail,
             date: historyData.date,

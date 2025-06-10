@@ -19,7 +19,7 @@ edit    product 10   existShop autorisation adminRoots
 
 create  history 10   existShop autorisation adminRoots
 delete  history 10   existShop autorisation adminRoots
-edit    history      existShop autorisation adminRoots
+edit    history 10   existShop autorisation adminRoots
 
 create  admin        existShop autorisation adminRoots
 delete  admin        existShop autorisation adminRoots

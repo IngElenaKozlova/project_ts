@@ -4,13 +4,13 @@
   "products": [
     {
       "_id": "copy1-c1531c89-b0c1-4c14-afdc-a588dfb33833",
-      "count": 2,
-      "price": 2402
+      "count": 1,
+      "price": 1201
     },
     {
       "_id": "copy-c1531c89-b0c1-4c14-afdc-a588dfb33833",
-      "count": 2,
-      "price": 2402
+      "count": 1,
+      "price": 1201
     }
   ]
 }
