@@ -252,29 +252,24 @@ export default {
         })
 
         if (isValidationError) return isValidationError
-        
-        // 1.3
 
         const isEmailExist = await isEmailExistInClient(clientEmail, shopEmail)
         if (!isEmailExist) return { status: 409, ok: false }
 
-        // 1.1 1.2
-
         let historyProducts = []
-        let updatedProducts = []
+
+        const resultHist = await readFileHistory(historyId, shopEmail)
+        if (!resultHist.ok) return { status: 404, ok: false }
+        const historyData = resultHist.data
 
         for (let index = 0; index < products.length; index++) {
             const product = products[index]
             const resultProd = await readFileProduct(product._id, shopEmail)
             if (!resultProd.ok) return { status: 404, ok: false }
-
-            const resultHist = await readFileHistory(historyId, shopEmail)
-            if (!resultHist.ok) return { status: 404, ok: false }
-            
+           
             const productData = resultProd.data
             const count = product.count
 
-            const historyData = resultHist.data
             const historyProdCount = historyData.products.find((elem) => elem._id === product._id)
 
             const stock = productData.stock + (historyProdCount.count - count)
@@ -292,66 +287,34 @@ export default {
             //  c = 4 h = 5  all = -10
             // r= h - c // all + r
 
+            
+            const updatedProdHist: productHistoryI = {
+                _id: product._id,
+                count: count,
+                price: count * productData.price
+            }
 
-            // const stock = productData.stock - product.count //! if -productData.stock logica no work -12 - 1 = -13 (-11)
-            // const productWithPrice : productHistoryI = {
-            //     _id : productData._id,
-            //     count : product.count,
-            //     price : productData.price * product.count
-            // }
-            
-            
+            historyProducts.push(updatedProdHist)
+
             const updatedProduct = {...productData, stock}
-            const p =  await createFileProduct(updatedProduct, shopEmail)
-            console.log(p)
-            // historyProducts.push(updatedProduct)
-            // const updatedProduct = {...productData, stock}
-
-            // updatedProducts.push(updatedProduct)
+            
+            const resultCreateProd = await createFileProduct(updatedProduct, shopEmail)
+            if (!resultCreateProd) return {status : 500, ok: false}
+       //     return {ok : resultCreateProd.ok}
         }
-        return
-        await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail))) // update product in json
-
-        const result2 = await readFileHistory(historyId, shopEmail)
-        if (!result2.ok) return { status: 404, ok: false }
-        let historyData = result2.data
 
         const editedHistory: historyI = { 
             clientEmail,
             date: historyData.date,
-            products : historyProducts 
+            products : historyProducts
         }
 
-        await createFileHistory(editedHistory, shopEmail)
+        const resultCreateHist = await createFileHistory(editedHistory, shopEmail)
+        if (!resultCreateHist) return {status : 500, ok: false}
 
-        // const result = await readFileHistory(historyId, shopEmail)
-        // if (!result.ok) return { status: 404, ok: false }
-        // const historyData = result.data
-
-        // const editedProductInHistory = { ...historyData, stock }
-        // const responseFs = await createFileProduct(editedProductInHistory, shopEmail)
-        // if (responseFs.ok) return { data: editedProductInHistory, ok: responseFs.ok}
+        return { data: editedHistory, ok: resultCreateHist.ok }
 
 
-
-        // const result2 = await createFileHistory(editedHistory, shopEmail) // create new updated history
-
-
-        // const currentClient = await readFileClient(clientEmail, shopEmail)
-        // const currentClientData = currentClient.data
-        // const updatedClient: clientI = {
-        //     _id: currentClient.data._id,
-        //     history: currentClientData.history, 
-        //     name: currentClientData.name,
-        //     email: currentClientData.email,
-        //     password: currentClientData.password
-        // }
-        // updatedClient.history.push(newHistory.date)
-        // const result2 = await editFileClient(updatedClient, clientEmail, shopEmail) // update existing client
-        // if (!result2) return {status : 500, ok: false}
-
-        
-        return { data: editedHistory, ok: true }
         // create plan for editHistory
         //? 1 add validation
         //? 1.1 check exist user
