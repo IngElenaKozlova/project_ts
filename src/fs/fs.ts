@@ -204,6 +204,20 @@ export const createFileHistory = async (historyData: historyI, shopEmail: string
 }
 
 
+
+export const readFileHistory = async (historyId: number, shopEmail: string) : Promise<{ok : boolean, data ? : historyI}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/histories/' + historyId + '.json'
+        const result = await fs.readFile(pathFile, 'utf8');
+        const jsonData = JSON.parse(result);
+        return { ok: true, data: jsonData }
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}
+
+
 export const deleteFileHistory = async (shopEmail: string, historyId: number) : Promise<{ok : boolean}> => {
     try {
         const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/histories/' + historyId + '.json'
