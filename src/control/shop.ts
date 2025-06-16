@@ -380,7 +380,6 @@ export default {
         }
 
         const result = await readFileAdmin(shopEmail)
-        console.log(result, 'result aaa-----------------------')
         if (result.ok) {
             const adminsData = result.data
             const findAdminEmail = adminsData.find(({email}) => email === adminEmail)
@@ -394,18 +393,6 @@ export default {
             if (!createAdminResult.ok) return { status: 500, ok: false }
             return { data: newAdmin, ok: createAdminResult.ok }
         }
-
-
-
-
-
-        
-        //? 1 validation adminEmail and shopEmail +
-        //? 2 add rools (in route too) +
-        //? 3 add rools json description +
-        //? 4 validation rools +
-        //? 5 adminRools send isnt array check -
-        
     },
 }
 

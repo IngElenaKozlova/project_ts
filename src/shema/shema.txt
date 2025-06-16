@@ -21,7 +21,7 @@ create  history 10   existShop autorisation adminRoots   106
 delete  history 10   existShop autorisation adminRoots   107
 edit    history 10   existShop autorisation adminRoots   108
 
-create  admin        existShop autorisation adminRoots
+create  admin   10   existShop autorisation adminRoots
 delete  admin        existShop autorisation adminRoots
 edit    admin        existShop autorisation adminRoots
 
