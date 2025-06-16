@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory} from '../fs/fs'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory, createFileAdmin} from '../fs/fs'
 import { shopI, createClientI, clientI, productI, historyI, productHistoryParamsI, productHistoryI, historyParamsI} from './interface'
 import { responseControler } from '../interface/response'
 
@@ -359,19 +359,53 @@ export default {
         return {ok: true}
     },
 
-    async createAdmin(adminEmail: string, shopEmail: string): Promise<responseControler> {
+    async createAdmin({adminEmail, adminRools} : {adminEmail: string, adminRools: number[]}, shopEmail: string): Promise<responseControler> {
+
+        const isEmailExist = isEmailExistInShop(shopEmail)
+        if (!isEmailExist) return { status: 404, ok: false }
+
+        const keys = { adminEmail: { rools: ROOLS.email } }
+        const isValidationError = isAllValidation({adminEmail}, keys)
+        if (isValidationError.ok) return isValidationError
+
+        for (let index = 0; index < adminRools.length; index++) {
+            const rool = adminRools[index]
+            if (typeof rool !== 'number') return { status: 422, ok: false }
+            if (!(rool >= 100 && rool <= 108)) return { status: 422, ok: false }                  
+        }
 
         const newAdmin: any = {
-            email: adminEmail
+            email: adminEmail,
+            rools: adminRools
         }
 
         const result = await readFileAdmin(shopEmail)
-        if (!result.ok) return { status: 404, ok: false }
+        console.log(result, 'result aaa-----------------------')
+        if (result.ok) {
+            const adminsData = result.data
+            const findAdminEmail = adminsData.find(({email}) => email === adminEmail)
+            if (findAdminEmail) return { status: 409, ok: false }
 
-        const adminsData = result.data
-        adminsData.push(newAdmin)
+            adminsData.push(newAdmin)   
+            const rewriteFileAdmin = await createFileAdmin(adminsData, shopEmail)
+            return { data: newAdmin, ok: rewriteFileAdmin.ok }
+        } else {
+            const createAdminResult = await createFileAdmin([newAdmin], shopEmail)
+            if (!createAdminResult.ok) return { status: 500, ok: false }
+            return { data: newAdmin, ok: createAdminResult.ok }
+        }
 
-        return { data: newAdmin, ok: result.ok }
+
+
+
+
+        
+        //? 1 validation adminEmail and shopEmail +
+        //? 2 add rools (in route too) +
+        //? 3 add rools json description +
+        //? 4 validation rools +
+        //? 5 adminRools send isnt array check -
+        
     },
 }
 

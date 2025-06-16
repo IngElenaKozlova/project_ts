@@ -9,17 +9,17 @@ create shop     10
 delete shop     10             autorisation owner
 edit   shop     10   existShop autorisation owner
 
-create  client  10   existShop autorisation adminRoots
-delete  client  10   existShop autorisation adminRoots
-edit    client  10   existShop autorisation adminRoots
+create  client  10   existShop autorisation adminRoots   100
+delete  client  10   existShop autorisation adminRoots   101       
+edit    client  10   existShop autorisation adminRoots   102
 
-create  product 10   existShop autorisation adminRoots
-delete  product 10   existShop autorisation adminRoots
-edit    product 10   existShop autorisation adminRoots
+create  product 10   existShop autorisation adminRoots   103
+delete  product 10   existShop autorisation adminRoots   104
+edit    product 10   existShop autorisation adminRoots   105
 
-create  history 10   existShop autorisation adminRoots
-delete  history 10   existShop autorisation adminRoots
-edit    history 10   existShop autorisation adminRoots
+create  history 10   existShop autorisation adminRoots   106
+delete  history 10   existShop autorisation adminRoots   107
+edit    history 10   existShop autorisation adminRoots   108
 
 create  admin        existShop autorisation adminRoots
 delete  admin        existShop autorisation adminRoots

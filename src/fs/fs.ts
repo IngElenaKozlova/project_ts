@@ -249,15 +249,16 @@ export const deleteHistoryFromClient = async (shopEmail: string, clientEmail: st
 
 export const readFileAdmin = async (shopEmail: string) : Promise<{ok : boolean, data ? : any}> => {
     try {
-        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + 'admins.json'
-        const result = await fs.readFile(pathFile, 'utf8');
-        const jsonData = JSON.parse(result);
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/admins.json'
+        const result = await fs.readFile(pathFile, 'utf8')
+        const jsonData = JSON.parse(result)
         return { ok: true, data: jsonData }
     } catch (e) {
         console.log(e)
         return { ok: false }
     }
 }
+
 
 export const checkIfAdmin = async (shopEmail: string, email: string) : Promise<{ok : boolean, error ? : number, data? : adminAccessI[]}> => {
     try {
@@ -271,5 +272,18 @@ export const checkIfAdmin = async (shopEmail: string, email: string) : Promise<{
     } catch (e) {
         console.log(e)
         return { error: 500, ok: false } 
+    }
+}
+
+
+export const createFileAdmin = async (adminData: adminAccessI[], shopEmail: string) : Promise<{ok : boolean}> => {
+    try {
+        const adminDataJson = JSON.stringify(adminData, null, 2)
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/admins.json'
+        await fs.writeFile(pathFile, adminDataJson)
+        return { ok: true}
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
     }
 }

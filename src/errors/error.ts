@@ -1,8 +1,9 @@
 const ERRORS = {
-    409 : "Email already exist",
+    409 : "Already exist",
     404 : "Not found",
     403 : "No access to the shop",
-    500 : "Internal error"
+    500 : "Internal error",
+    422 : "Validation error"
 }
 
 export const responseError = (statusOrErrorText : string | number) : {text : string, status : number} => {

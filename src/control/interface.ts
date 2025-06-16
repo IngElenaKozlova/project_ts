@@ -67,7 +67,8 @@ export interface adminI {
 }
 
 export interface adminAccessI {
-    email: string
+    email: string,
+    rools: number[]
 }
 
 
