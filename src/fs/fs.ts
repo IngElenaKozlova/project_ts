@@ -287,3 +287,18 @@ export const createFileAdmin = async (adminData: adminAccessI[], shopEmail: stri
         return { ok: false }
     }
 }
+
+
+export const deleteAdminFromAdmins = async (adminEmail: string, shopEmail: string) : Promise<{ok : boolean}> => {
+    try {
+        const pathFile = path.resolve('') + '/src/datas/' + shopEmail + '/admins.json'
+        const result = await fs.readFile(pathFile, 'utf8')
+        const jsonDataAdmins = JSON.parse(result)
+        const adminsWithoutDeletedAdmin = jsonDataAdmins.filter(({email}) => email !== adminEmail)
+        await createFileAdmin(adminsWithoutDeletedAdmin, shopEmail)
+        return {ok: true}
+    } catch (e) {
+        console.log(e)
+        return { ok: false }
+    }
+}

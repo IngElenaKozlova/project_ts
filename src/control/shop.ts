@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 // import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
-import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory, createFileAdmin} from '../fs/fs'
+import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory, createFileAdmin, deleteAdminFromAdmins} from '../fs/fs'
 import { shopI, createClientI, clientI, productI, historyI, productHistoryParamsI, productHistoryI, historyParamsI} from './interface'
 import { responseControler } from '../interface/response'
 
@@ -394,7 +394,19 @@ export default {
             return { data: newAdmin, ok: createAdminResult.ok }
         }
     },
+
+    async deleteAdmin(adminEmail: string, shopEmail: string): Promise<responseControler> {
+
+        const result = await readFileAdmin(shopEmail)
+        if (!result.ok) return { status: 404, ok: false}
+        const resDeleteAdmin = await deleteAdminFromAdmins(adminEmail, shopEmail)
+        if (!resDeleteAdmin.ok) return {status : 500, ok: false, text : "deleteAdmin"}
+        return {ok: true}
+     },
 }
+
+
+
 
 console.log(n) // undefined
 var n = 1;

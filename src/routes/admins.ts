@@ -23,6 +23,25 @@ router.post('/createAdmin', async (req, res) => {
 })
 
 
+router.delete('/deleteAdmin', middlewarAccessToShop, async (req, res) => {
+    try {
+        const { shopemail} = req.headers
+        const response = await controlerShop.deleteAdmin(req.body.adminEmail, shopemail)
+
+        if (response.status) {
+            const { status, text } = responseError(response.text || response.status)
+            return res.status(status).json({ text, ok: false })
+        }
+
+        return res.status(200).json(response)
+
+    } catch (e) {
+        console.log(e)
+        return res.status(500).json({ text: 'server error', ok: false })
+    }
+})
+
+
 module.exports = router
 
 
