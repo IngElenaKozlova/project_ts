@@ -1,7 +1,7 @@
-const fs = require('fs').promises;
-const path = require('path');
+const fs = require('fs').promises
+const path = require('path')
 import {shopI, clientI, productI, historyI, adminAccessI} from '../control/interface'
-// import { v4 as uuidv4 } from 'uuid';
+
 
 const FN = {
     CLIENTS : "/clients",

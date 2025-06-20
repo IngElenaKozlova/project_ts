@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from 'uuid'
-// import bcrypt from 'bcrypt'
 import * as argon2 from "argon2"
 import { ROOLS, isAllValidation } from './validation'
 import { createStartPackShop, editFileShop, deleteFileShop, readFileShop, isEmailExistInShop, createFileClient, readFileClient, isEmailExistInClient, editFileClient, createFileProduct, deleteFileClient, readFileProduct, deleteFileProduct, createFileHistory, readFileAdmin, deleteFileHistory, deleteHistoryFromClient, readFileHistory, createFileAdmin, deleteAdminFromAdmins} from '../fs/fs'
@@ -275,20 +274,6 @@ export default {
             const historyProdCount = historyData.products.find((elem) => elem._id === product._id)
 
             const stock = productData.stock + (historyProdCount.count - count)
-
-
-            //  c = 4 h = 5  all = 10
-            // r= h - c // all + r
-
-            //  c = 5 h = 4  all = 10
-            // r= h - c // all + r
-
-            //  c = 5 h = 4  all = -10
-            // r= h - c // all + r
-
-            //  c = 4 h = 5  all = -10
-            // r= h - c // all + r
-
             
             const updatedProdHist: productHistoryI = {
                 _id: product._id,
@@ -303,18 +288,6 @@ export default {
         }
 
         const createUpdatedProduct = await Promise.all(updatedProducts.map(async (product : productI) => await createFileProduct(product, shopEmail)))     
-
-
-        // const errorCreate = createUpdatedProduct.find((elem) => elem.ok === false)
-        // const errorCreate = createUpdatedProduct.find(({ok}) => !ok)
-        // if (errorCreate) return {data: errorCreate, ok: false}
-
-        // const errorCreate = createUpdatedProduct.filter(({ok}) => !ok)
-        // if (errorCreate.length) return {data: errorCreate, ok: false}     
-        
-        // const resultCreateProd = await createFileProduct(updatedProduct, shopEmail)
-        // if (!resultCreateProd) return {status : 500, ok: false}
-
         
         const editedHistory: historyI = { 
             clientEmail,
@@ -326,29 +299,6 @@ export default {
         if (!resultCreateHist) return {status : 500, ok: false}
 
         return { data: editedHistory, ok: resultCreateHist.ok }
-
-
-        // create plan for editHistory
-        //? 1 add validation
-        //? 1.1 check exist user
-        //? 1.2 check exist shop 
-        //? 1.3 check validation data
-        
-        //? 2 get all need products
-        //? 2.1 check exist product 
-
-        //? 3 get one need history
-        //? 3.1 check exist history 
-
-        //? 4 logical change
-        //? 4.1 change products
-        //? 4.2 change history
-
-        //? 5 save products
-        //? 6 save history
-
-        //? 7 return history 
-
     },
 
     async deleteHistory(shopEmail: string, clientEmail: string, historyId: number): Promise<responseControler> {
@@ -425,11 +375,3 @@ export default {
     },
 
 }
-
-
-
-
-// console.log(n) // undefined
-// var n = 1;
-// console.log(n) // 1
-

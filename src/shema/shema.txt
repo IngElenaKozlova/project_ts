@@ -1,9 +1,4 @@
-existShop = middlewarAccessToShop
-autorisation = 
-owner =
-adminRoots = 
 
-// need think hash password over
 
 create shop     10
 delete shop     10             autorisation owner
@@ -28,60 +23,3 @@ edit    admin   10   existShop autorisation adminRoots
 
 0 - 10
 
-
-
-
----- route ----
-(? middlware) 
-
-controlFuncion()  { ok : boolean, data ? : resWork, status ? : number, text ? : text }
-
-if (valid) valid
-
-res.status(code).json(response)
-
-
-
-
----- controlFuncion --- create edit
-
-if (valid) valid
-newObject{}
-fs
-return {data : newObject{}, ok : true}
-
----- controlFuncion --- remove
-
-fs
-if error
-return { ok : true}
-
-
-
-
-
-history 
-// shopemail - headers
-// clientEmail - body 
-
-// products - body (validation if _id exists and count and price are numbers)
-  products: [
-                { _id: 1, count: 5, price: 1200 },
-                { _id: 2, count: 5, price: 1200 }
-            ]
-
-
- "name": "Mr White",
-        "email": "abc213@dasda.com",
-        "password": "User1@"
-
-
-
-
-(101, 117)
-
-101 create client 
-102 edit client 
-103 remove client 
-
-117 edit name client 

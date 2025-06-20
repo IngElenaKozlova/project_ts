@@ -24,6 +24,7 @@ router.post('/createShop', async (req, res) => {
     }
 })
 
+
 router.post('/loginShop', async (req, res) => {
     try {
         const {email, password} = req.body
@@ -31,8 +32,6 @@ router.post('/loginShop', async (req, res) => {
         if (response.ok === false) return res.status(404).json({ text: 'shop with this email doesn not exist', ok : false})
 
         const currentShop = response.data;
-
-        // const ispassword = await bcrypt.compare(password, currentShop.crypted_password)
 
         const ispassword = await argon2.verify(password, currentShop.password)
 

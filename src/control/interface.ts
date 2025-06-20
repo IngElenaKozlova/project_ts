@@ -38,13 +38,12 @@ export interface productHistoryParamsI {
 
 export interface historyI {
     clientEmail: string,
-    date: number, // UNIX, use like nameFile
+    date: number,
     products: productHistoryI[]
 }
 
 export interface historyParamsI {
     clientEmail: string,
-    // date: number, // UNIX, use like nameFile
     products: productHistoryParamsI[]
 }
 
@@ -70,9 +69,3 @@ export interface adminAccessI {
     email: string,
     rools: number[]
 }
-
-
-// const shop = {
-//     roots : ['0f96b062-d562-42f8-9975-162abfc97ded' = _id of adminI] 
-
-// }

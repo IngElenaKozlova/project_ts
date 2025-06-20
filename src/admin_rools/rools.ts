@@ -9,8 +9,3 @@ const ADMINROOLS = {
     107 : "delete history",
     108 : "edit history"
 }
-
-// export const responseError = (statusOrErrorText : string | number) : {text : string, status : number} => {
-//     if(typeof statusOrErrorText === 'string') return {text : statusOrErrorText, status : 420}
-//     return { text : ADMINROOLS[statusOrErrorText] || 'no text', status : +statusOrErrorText }
-// }

@@ -1,18 +1,9 @@
-// POST /create  
-// POST /update  
-// delete /delete  
-
 const {Router} = require("express")
 const router = Router()
 import controlerShop from '../control/shop'
 import { responseError } from '../errors/error';
 import { middlewarAccessToShop, middlewarAdminAccess } from '../middlewar/middlewar';
 
-// client = {
-//     name: "Arnol",
-//     email: "user@dasda.com",
-//     password: "1234"
-// }
 
 router.post('/createClient', middlewarAccessToShop, middlewarAdminAccess, async (req, res) => {
     try{     

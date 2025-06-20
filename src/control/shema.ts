@@ -6,8 +6,6 @@ const client = {
     history: ['asda']
 }
 
-
-
 const product = {
     _id: 1,
     name: "Laptop",

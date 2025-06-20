@@ -1,24 +1,9 @@
-// POST /create  
-// POST /update  
-// delete /delete  
-
 const { Router } = require("express")
 const router = Router()
 import controlerShop from '../control/shop'
 import { responseError } from '../errors/error'
 import { middlewarAccessToShop } from '../middlewar/middlewar'
 
-// product = {
-//         _id: 1,   - create server
-//         name: "Laptop",
-//         price: 1200,
-//         category: "Electronics",
-//         stock: 15,
-//         description: "High-performance laptop with 16GB RAM and 512GB SSD storage.",
-//         isAvailable: true,
-//         rating: 4.5,
-//         type: 'LAPTOP'
-// }
 
 router.post('/createProduct', middlewarAccessToShop, async (req, res) => {
     try {
