@@ -403,12 +403,33 @@ export default {
         if (!resDeleteAdmin.ok) return {status : 500, ok: false, text : "deleteAdmin"}
         return {ok: true}
      },
+
+     async editAdmin({adminEmail, adminRools} : {adminEmail: string, adminRools: number[]}, shopEmail: string): Promise<responseControler> {
+
+        for (let index = 0; index < adminRools.length; index++) {
+            const rool = adminRools[index]
+            if (typeof rool !== 'number') return { status: 422, ok: false }
+            if (!(rool >= 100 && rool <= 108)) return { status: 422, ok: false }                  
+        }
+
+        const result = await readFileAdmin(shopEmail)
+        if (!result.ok) return { status: 404, ok: false}
+        const adminsData = result.data
+        const currentAdminEmail = adminsData.find(({email}) => email === adminEmail)
+        if (!currentAdminEmail) return { status: 404, ok: false }
+
+        currentAdminEmail.rools = adminRools
+          
+        const rewriteFileAdmin = await createFileAdmin(adminsData, shopEmail)
+        return { data: currentAdminEmail, ok: rewriteFileAdmin.ok }       
+    },
+
 }
 
 
 
 
-console.log(n) // undefined
-var n = 1;
-console.log(n) // 1
+// console.log(n) // undefined
+// var n = 1;
+// console.log(n) // 1
 
